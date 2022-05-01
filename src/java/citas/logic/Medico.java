@@ -1,43 +1,59 @@
 package citas.logic;
 
-import java.util.List;
+import java.util.*;
+import citas.logic.*;
 
-public class Medico implements java.io.Serializable
-{
+public class Medico implements java.io.Serializable{
+
     Usuario usuario;
     private String cedula;
     private String nombreEspecialidad;
     private String nombreLocalidad;
     private int costoConsulta;
     private String presentacion;
-    private int codDisp;
+    private HashMap<String, DisponibilidadMedico> disponibilidades;
     private int duracionConsulta;
-    private String horaInicio;
-    private String horaFinal;
-    private String[] diasDisponible;
     private boolean medicoActivado;
+
     
-    public Medico() 
-    {
-        usuario = new Usuario();
-    }
+    public Medico() {}
 	
-    public Medico(Usuario usuario, String cedula, String nombreEspecialidad, String nombreLocalidad, int costoConsulta, String presentacion, 
-    int codDisp, int duracionConsulta,String horaInicio,String horaFinal,String[] diasDisponible)
+    public Medico(Usuario usuario, String cedula, String nombreEspecialidad, String nombreLocalidad, int costoConsulta, String presentacion, HashMap<String, DisponibilidadMedico> disponibilidades, int duracionConsulta)
     {
-        this.usuario = usuario;
-        this.cedula = cedula;
-        this.nombreEspecialidad = nombreEspecialidad;
-        this.nombreLocalidad = nombreLocalidad;
-        this.costoConsulta = costoConsulta;
-        this.presentacion = presentacion;
-        this.codDisp = codDisp;
-        this.duracionConsulta = duracionConsulta;
-        this.horaInicio = horaInicio;
-        this.horaFinal = horaFinal;
-        this.diasDisponible = diasDisponible;
-        this.medicoActivado = false;
+       this.usuario = usuario;
+       this.cedula = cedula;
+       this.nombreEspecialidad = nombreEspecialidad;
+       this.nombreLocalidad = nombreLocalidad;
+       this.costoConsulta = costoConsulta;
+       this.presentacion = presentacion;
+       this.disponibilidades = disponibilidades;
+       this.duracionConsulta = duracionConsulta;
+       this.medicoActivado = false;
     }
+    
+    /*public Medico(String cedula, String nombreEspecialidad, String nombreLocalidad, int costoConsulta, String presentacion, int codDisp, int duracionConsulta)
+    {
+       this.cedula = cedula;
+       this.nombreEspecialidad = nombreEspecialidad;
+       this.nombreLocalidad = nombreLocalidad;
+       this.costoConsulta = costoConsulta;
+       this.presentacion = presentacion;
+       this.codDisp = codDisp;
+       this.duracionConsulta = duracionConsulta;
+    }
+    
+    public Medico(Usuario usuario, String cedula, String nombreEspecialidad, String nombreLocalidad, int costoConsulta, String presentacion, int duracionConsulta)
+    {
+       this.usuario = usuario;
+       this.cedula = cedula;
+       this.nombreEspecialidad = nombreEspecialidad;
+       this.nombreLocalidad = nombreLocalidad;
+       this.costoConsulta = costoConsulta;
+       this.presentacion = presentacion;
+       //this.codDisp = codDisp;
+       this.duracionConsulta = duracionConsulta;
+    }*/
+    
     public Usuario getUsuario()
     {
         return this.usuario;
@@ -72,44 +88,40 @@ public class Medico implements java.io.Serializable
         return this.nombreLocalidad;
     }
     
-    public void setNombreLocalidad(String nombreLocalidad)
+    public String setNombreLocalidad()
     {
-        this.nombreLocalidad=nombreLocalidad;
+        return this.nombreLocalidad;
     }
     
-    public int getCostoConsulta()
-    {
-        return costoConsulta;
-    }
     
-    public void setCostoConsulta(int costoConsulta)
+    public void setCostoConsulta(int costoConsulta) 
     {
         this.costoConsulta = costoConsulta;
     }
     
-    public String getPresentacion()
+    public int getCostoConsulta()
     {
-        return presentacion;
+        return this.costoConsulta;
     }
     
     public void setPresentacion(String presentacion)
     {
         this.presentacion = presentacion;
     }
-    
-    public int getCodDisp()
+
+    public String getPresentacion()
     {
-        return codDisp;
+        return this.presentacion;
     }
     
-    public void setCodDisp(int codDisp)
+    public void setDisponibilidades(HashMap<String, DisponibilidadMedico> disponibilidades)
     {
-        this.codDisp = codDisp;
+        this.disponibilidades = disponibilidades;
     }
     
-    public int getDuracionConsulta()
+    public HashMap<String, DisponibilidadMedico> getDisponibilidades()
     {
-        return duracionConsulta;
+        return this.disponibilidades;
     }
     
     public void setDuracionConsulta(int duracionConsulta)
@@ -117,36 +129,11 @@ public class Medico implements java.io.Serializable
         this.duracionConsulta = duracionConsulta;
     }
     
-    public String getHoraInicio()
+    public int getDuracionConsulta()
     {
-        return horaInicio;
+        return this.duracionConsulta;
     }
     
-    public void  setHoraInicio(String horaInicio)
-    {
-        this.horaInicio = horaInicio;
-    }
-    
-    public String getHoraFinal()
-    {
-        return horaFinal;
-    }
-    
-    public void  setHoraFinal(String horaFinal)
-    {
-        this.horaFinal = horaFinal;
-    }
-    
-    public String[] getDiasDisponible()
-    {
-        return diasDisponible;
-    }
-    
-    public void setDiasDisponible(String[] diasDisponible)
-    {
-        this.diasDisponible = diasDisponible;
-    }
-
     public boolean isMedicoActivado()
     {
         return medicoActivado;
@@ -160,6 +147,27 @@ public class Medico implements java.io.Serializable
     boolean isMedicoActivado(String cedula) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
-    
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj) 
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass()) 
+        {
+            return false;
+        }
+        final Medico other = (Medico) obj;
+        if (!Objects.equals(this.cedula, other.cedula))
+        {
+            return false;
+        }
+        return true;
+    }
 }

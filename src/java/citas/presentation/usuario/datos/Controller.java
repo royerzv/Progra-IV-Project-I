@@ -93,6 +93,7 @@ public class Controller extends HttpServlet
     void updateModel(HttpServletRequest request)
     {
        citas.presentation.usuario.datos.Model model= (citas.presentation.usuario.datos.Model) request.getAttribute("model");
+      
        
         model.getCurrent().setNombre(request.getParameter("nombreFld"));
     }
@@ -108,6 +109,7 @@ public class Controller extends HttpServlet
         {
             service.clienteUpdate(model.getCurrent());
             return "/presentacion/Index.jsp";
+            //return "/presentacion/usuario/datos/show";
         } catch (Exception ex) {
             Map<String,String> errores = new HashMap<>();
             request.setAttribute("errores", errores);

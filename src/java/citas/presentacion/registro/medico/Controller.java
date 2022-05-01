@@ -1,8 +1,6 @@
 package citas.presentacion.registro.medico;
 
-import citas.logic.Medico;
-import citas.logic.Service;
-import citas.logic.Usuario;
+import citas.logic.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,8 +57,6 @@ public class Controller extends HttpServlet
         model.getCurrent().setCostoConsulta(0);
         model.getCurrent().setPresentacion("");
         model.getCurrent().setDuracionConsulta(0);
-        model.getCurrent().setHoraInicio("");
-        model.getCurrent().setHoraFinal("");
         return "/presentacion/registro/medico/View.jsp";
     }
     
@@ -96,9 +92,20 @@ public class Controller extends HttpServlet
                 String nameFile =  saveFile(part,uploads);
                 Usuario usuario = new Usuario(request.getParameter("cedulaFld"),request.getParameter("claveFld"),"Medico",request.getParameter("nombreFld"),nameFile);
                 service.agregarCliente(usuario);
+                HashMap<String, DisponibilidadMedico> disponibilidades = new HashMap<>();
                 Medico medico = new Medico(usuario,usuario.getCedula(),request.getParameter("especialidad"),request.getParameter("ciudad"),Integer.valueOf(request.getParameter("costoFld")),
-                request.getParameter("presentacionFld"),service.codigo(),Integer.valueOf(request.getParameter("duracionFld")),
-                request.getParameter("horaInicioFld"),request.getParameter("horaFinalFld"),request.getParameterValues("dias"));
+                request.getParameter("presentacionFld"),disponibilidades,Integer.valueOf(request.getParameter("duracionFld")));
+                               
+                for(String dia:request.getParameterValues("dias")){
+                    DisponibilidadMedico disponibilidad = new DisponibilidadMedico(medico.getCedula(), dia, Integer.parseInt(request.getParameter("horaInicioFld")), Integer.parseInt(request.getParameter("horaFinalFld")));
+                    medico.getDisponibilidades().put(medico.getCedula()+disponibilidad.getCodigoDisponibilidad(), disponibilidad);
+                }
+                
+                
+                
+                /*public Medico(Usuario usuario, String cedula, String nombreEspecialidad, String nombreLocalidad, int costoConsulta, String presentacion, 
+                        HashMap<String, DisponibilidadMedico> disponibilidades, int duracionConsulta)*/
+                
                 service.agregarMedico(medico);
                 return "/presentacion/login/show";
             }
