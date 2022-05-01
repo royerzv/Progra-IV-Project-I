@@ -97,7 +97,7 @@ public class Controller extends HttpServlet
                 request.getParameter("presentacionFld"),disponibilidades,Integer.valueOf(request.getParameter("duracionFld")));
                                
                 for(String dia:request.getParameterValues("dias")){
-                    DisponibilidadMedico disponibilidad = new DisponibilidadMedico(medico.getCedula(), dia, Integer.parseInt(request.getParameter("horaInicioFld")), Integer.parseInt(request.getParameter("horaFinalFld")));
+                    DisponibilidadMedico disponibilidad = new DisponibilidadMedico(medico.getCedula(), dia, request.getParameter("horaInicioFld"), request.getParameter("horaFinalFld"));
                     medico.getDisponibilidades().put(medico.getCedula()+disponibilidad.getCodigoDisponibilidad(), disponibilidad);
                 }
                 

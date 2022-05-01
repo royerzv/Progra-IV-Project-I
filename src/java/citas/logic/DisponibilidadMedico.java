@@ -11,13 +11,13 @@ public class DisponibilidadMedico implements java.io.Serializable {
     private int codigoDisponibilidad;
     private String cedulaMedico;
     private String dia;
-    private int horaInicio;
-    private int horaFinal;
+    private String horaInicio;
+    private String horaFinal;
     private List<Cita> listaCitas;
     
     public DisponibilidadMedico(){}
     
-    public DisponibilidadMedico(int codigoDisponibilidad, String cedulaMedico, String dia, int horaInicio, int horaFinal){
+    public DisponibilidadMedico(int codigoDisponibilidad, String cedulaMedico, String dia, String horaInicio, String horaFinal){
         this.codigoDisponibilidad = codigoDisponibilidad;
         this.cedulaMedico = cedulaMedico;
         this.dia = dia;
@@ -25,9 +25,9 @@ public class DisponibilidadMedico implements java.io.Serializable {
         this.horaFinal = horaFinal;
     }
     
-    public DisponibilidadMedico(String cedulaMedico, String dia, int horaInicio, int horaFinal){
+    public DisponibilidadMedico(String cedulaMedico, String dia, String horaInicio, String horaFinal){
         Service service = Service.instance();
-        this.codigoDisponibilidad = service.agregaDisponibilidades(cedulaMedico, dia, horaInicio, horaFinal);
+        this.codigoDisponibilidad = service.agregaDisponibilidadesCreaID(cedulaMedico, dia, horaInicio, horaFinal);
         this.cedulaMedico = cedulaMedico;
         this.dia = dia;
         this.horaInicio = horaInicio;
@@ -58,19 +58,19 @@ public class DisponibilidadMedico implements java.io.Serializable {
         this.dia = dia;
     }
     
-    public int getHoraInicio(){
+    public String getHoraInicio(){
         return this.horaInicio;
     }
     
-    public void setHoraInicio(int horaInicio){
+    public void setHoraInicio(String horaInicio){
         this.horaInicio = horaInicio;
     }
     
-    public int getHoraFinal(){
+    public String getHoraFinal(){
         return this.horaFinal;
     }
     
-    public void setHoraFinal(int horaFinal){
+    public void setHoraFinal(String horaFinal){
         this.horaFinal = horaFinal;
     }
     

@@ -110,7 +110,7 @@ public class Service
                 String nombreLocalidadObj = rs.getString("nombreLocalidad");
                 int costoConsultaObj = rs.getInt("costoConsulta");
                 String presentacionObj = rs.getString("presentacion");
-                int codDispObj = rs.getInt("codDisp");
+                //int codDispObj = rs.getInt("codDisp");
                 int duracionConsultaObj = rs.getInt("duracionConsulta");
                 String claveObj = rs.getString("clave");
                 String tipoObj = rs.getString("tipo");
@@ -187,8 +187,8 @@ public class Service
                 int codDispObj = rs.getInt("codDisp");
                 String idMedicoObj = rs.getString("idMedico");
                 String diaObj = rs.getString("dia");
-                int horaInicioObj = rs.getInt("horaInicio");
-                int horaFinalObj = rs.getInt("horaFinal");
+                String horaInicioObj = rs.getString("horaInicio");
+                String horaFinalObj = rs.getString("horaFinal");
                 
                 DisponibilidadMedico disp =  new DisponibilidadMedico(codDispObj, idMedicoObj, diaObj, horaInicioObj, horaFinalObj);
                 listDispMed.add(disp);
@@ -322,7 +322,7 @@ public class Service
         
         /*SELECT * FROM [dbo].[Medico] AS M INNER JOIN [dbo].[Usuario] AS U ON M.cedula = U.cedula WHERE nombreEspecialidad LIKE 'Cardiologia' AND nombreLocalidad LIKE 'Guadalupe'
         ResultSet rs = sqlExecutorURL.ejecutaSQL("SELECT * FROM Medico AS M INNER JOIN Usuario AS U ON M.cedula = U.cedula WHERE nombreEspecialidad LIKE '" + especialidad + "' AND nombreLocalidad LIKE '" + localidad + "'");*/
-        
+                                                  
         ResultSet rs = sqlExecutorURL.ejecutaSQL("SELECT * FROM Medico AS M INNER JOIN Usuario AS U ON M.cedula = U.cedula INNER JOIN DispMedico AS D ON M.cedula = D.idMedico WHERE nombreEspecialidad LIKE '" + especialidad + "' AND nombreLocalidad LIKE '" + localidad + "'");
         try{
             while(rs.next()){
@@ -340,8 +340,8 @@ public class Service
                 String fotoObj = "/Proyecto 1/images/" + rs.getString("foto");
                 int codDispObj = rs.getInt("codDisp");
                 String diaObj = rs.getString("dia");
-                int horaInicioObj = rs.getInt("horaInicio");
-                int horaFinalObj = rs.getInt("horaFinal");
+                String horaInicioObj = rs.getString("horaInicio");
+                String horaFinalObj = rs.getString("horaFinal");
                 
                 
                 if(!listaMedicosFound.isEmpty()){
@@ -379,7 +379,6 @@ public class Service
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        
         return listaMedicosFound;
     }
     /*
@@ -456,7 +455,23 @@ public class Service
         return listaCitasFoundNombre;
     }
     
-    public int agregaDisponibilidades(String cedulaMedico, String dia, int horaInicio, int horaFinal){
+    public int agregaDisponibilidadesCreaID(String cedulaMedico, String dia, String horaInicio, String horaFinal){
+        
+        //medicos.add(medico); TO COMPLETE WITH THIS
+        
+        SQLExecutorURL sqlExecutorURL = new SQLExecutorURL("1433", "CITAS_MEDICAS", "root", "root");
+        sqlExecutorURL.abreConexion();
+        sqlExecutorURL.ejecutaSQLUpdate("INSERT DispMedico (idMedico, dia, horaInicio, horaFinal) VALUES ('" + cedulaMedico + "', '" + dia + "', " + horaInicio + ", " + horaFinal + ")");
+        ResultSet rs = sqlExecutorURL.ejecutaSQL("SELECT D.codDisp FROM DispMedico AS D WHERE D.idMedico LIKE '" + cedulaMedico + "' AND D.dia LIKE '" + dia + "' AND D.horaInicio LIKE " + horaInicio + " AND D.horaFinal LIKE " + horaFinal+ "");
+        try {
+            return rs.getInt("codDisp");
+        } catch (SQLException ex) {
+            Logger.getLogger(Service.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return -1;
+    }
+    
+    public int agregaDisponibilidades(int idMedico, String cedulaMedico, String dia, String horaInicio, String horaFinal){
         
         //medicos.add(medico); TO COMPLETE WITH THIS
         
